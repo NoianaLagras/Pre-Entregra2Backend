@@ -47,25 +47,22 @@ cartsRouter.get('/:cid', async (req, res) => {
 
 // ---- Agregar producto a un carrito ----
 cartsRouter.post('/:cid/products/:pid', async (req, res) => {
-  const  cid  = parseInt(req.params.cid); 
-  const  pid  = parseInt(req.params.pid); 
-  
-    // console de cid y pid
-    console.log(`CID: ${cid}, PID: ${pid}`);
+  const cid = parseInt(req.params.cid);
+  const pid = parseInt(req.params.pid);
 
-    if (isNaN(cid) || isNaN(pid)) {
-      res.status(400).json({ error: 'parametros no validos' });
-      return;
-    }
-  
-    try {
-      await cartManager.addProductToCart(cid, pid)
-      res.status(200).json({ message: 'Producto agregado al carrito' });
-    } catch (error) {
-      console.error("Error al agregar el producto al carrito:", error);
-      res.status(500).json({ error: 'No se pudo agregar el producto al carrito' });
-    }
-  });
+  if (isNaN(cid) || isNaN(pid)) {
+    res.status(400).json({ error: 'Parámetros no válidos' });
+    return;
+  }
+
+  try {
+    await cartManager.addProductToCart(cid, pid);
+    res.status(200).json({ message: 'Producto agregado al carrito' });
+  } catch (error) {
+    console.error("Error al agregar el producto al carrito:", error);
+    res.status(500).json({ error: 'No se pudo agregar el producto al carrito' });
+  }
+});
 
   // ---- Eliminar un producto de un carrito ----
 cartsRouter.delete('/:cid/products/:pid', async (req, res) => {

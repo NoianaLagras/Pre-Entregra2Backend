@@ -9,7 +9,7 @@ export class CartManager {
     this.path = path;
     this.carts = [];
   }
-
+// obtener carritos
   async getCarts() {
     try {
       if (existsSync(this.path)) {
@@ -23,7 +23,7 @@ export class CartManager {
       throw error;
     }
   }
-
+// crear carritos
   async createCart() {
     try {
       const carts = await this.getCarts();
@@ -42,7 +42,7 @@ export class CartManager {
       throw error;
     }
   }
-
+// obtener carrito por id
   async getCartById(cid) {
     
       const carts = await this.getCarts();
@@ -56,7 +56,7 @@ export class CartManager {
       return cart;
     }
   } 
-  
+  // agregar al carrito
   async addProductToCart(cid, pid) {
     try {
       const cart = await this.getCartById(cid);
@@ -88,7 +88,7 @@ export class CartManager {
     }
   }
   
-  
+  // eliminar de carrito 
   async removeProductFromCart(cid, pid) {
     try {
       const cart = await this.getCartById(cid);
