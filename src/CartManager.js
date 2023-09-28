@@ -2,7 +2,7 @@ import {existsSync , promises} from 'fs';
 import { ProductManager } from './ProductManager.js';
 import __dirname from './utils.js';
 
-const productManager = new ProductManager(`${__dirname}./Products.JSON`);
+const productManager = new ProductManager(`${__dirname}../Products.JSON`);
 
 export class CartManager {
   constructor(path) {
@@ -60,26 +60,26 @@ export class CartManager {
   async addProductToCart(cid, pid) {
     try {
       const cart = await this.getCartById(cid);
-
+  
       if (!cart) {
         throw new Error("No existe ese id de carrito");
       }
-
+  
       const product = await productManager.getProductById(pid);
-
+  
       if (!product) {
         throw new Error("No existe un producto con ese id");
       }
-
-      const productIndex = cart.products.findIndex((p) => p.id === pid);
-
+  
+      const productIndex = cart.products.find((p) => p.id === pid);
+  
       if (productIndex === -1) {
         const newProduct = { id: pid, quantity: 1 };
         cart.products.push(newProduct);
       } else {
         cart.products[productIndex].quantity++;
       }
-
+  
       await this.saveCarts();
       return cart;
     } catch (error) {
@@ -87,6 +87,7 @@ export class CartManager {
       throw error;
     }
   }
+  
   async removeProductFromCart(cid, pid) {
     try {
       const cart = await this.getCartById(cid);
@@ -95,7 +96,7 @@ export class CartManager {
         throw new Error("No existe ese id de carrito");
       }
   
-      const productIndex = cart.products.findIndex((p) => p.id === pid);
+      const productIndex = cart.products.find((p) => p.id === pid);
   
       if (productIndex === -1) {
         throw new Error("No existe un producto con ese id en el carrito");
