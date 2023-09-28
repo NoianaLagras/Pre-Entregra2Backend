@@ -71,7 +71,7 @@ export class CartManager {
         throw new Error("No existe un producto con ese id");
       }
   
-      const productIndex = cart.products.find((p) => p.id === pid);
+      const productIndex = cart.products.findIndex((p) => p.id === pid);
   
       if (productIndex === -1) {
         const newProduct = { id: pid, quantity: 1 };
@@ -87,6 +87,7 @@ export class CartManager {
       throw error;
     }
   }
+  
   
   async removeProductFromCart(cid, pid) {
     try {
