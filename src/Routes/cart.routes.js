@@ -67,6 +67,29 @@ cartsRouter.post('/:cid/products/:pid', async (req, res) => {
     }
   });
 
-  
+  // ---- Eliminar un producto de un carrito ----
+cartsRouter.delete('/:cid/products/:pid', async (req, res) => {
+  const cid = parseInt(req.params.cid);
+  const pid = parseInt(req.params.pid);
+
+  if (isNaN(cid) || isNaN(pid)) {
+    res.status(400).json({ error: 'parametros no validos' });
+    return;
+  }
+
+  try {
+    const cart = await cartManager.removeProductFromCart(cid, pid);
+
+    if (!cart) {
+      res.status(404).json({ error: 'No se encontró el carrito' });
+    } else {
+      res.status(200).json({ message: 'Producto eliminado del carrito' });
+    }
+  } catch (error) {
+    console.error("Error al eliminar el producto del carrito", error);
+    res.status(500).json({ error: 'No se pudo eliminar el producto del carrito' });
+  }
+});
+
 
 export default cartsRouter;

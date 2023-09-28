@@ -87,7 +87,31 @@ export class CartManager {
       throw error;
     }
   }
-
+  async removeProductFromCart(cid, pid) {
+    try {
+      const cart = await this.getCartById(cid);
+  
+      if (!cart) {
+        throw new Error("No existe ese id de carrito");
+      }
+  
+      const productIndex = cart.products.findIndex((p) => p.id === pid);
+  
+      if (productIndex === -1) {
+        throw new Error("No existe un producto con ese id en el carrito");
+      }
+  
+      // Elimina el producto del carrito
+      cart.products.splice(productIndex, 1);
+  
+      await this.saveCarts();
+      return cart;
+    } catch (error) {
+      console.error("Error al eliminar el producto del carrito:", error);
+      throw error;
+    }
+  }
+  
   async saveCarts() {
     try {
       await promises.writeFile(this.path, JSON.stringify(this.carts));
