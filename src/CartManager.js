@@ -2,8 +2,7 @@ import {existsSync , promises} from 'fs';
 import { ProductManager } from './ProductManager.js';
 import __dirname from './utils.js';
 
-const productManager = new ProductManager(`${__dirname}../Products.JSON`);
-
+const productManager = new ProductManager(`${__dirname}../../Products.JSON`)
 export class CartManager {
   constructor(path) {
     this.path = path;
@@ -44,25 +43,24 @@ export class CartManager {
   }
 // obtener carrito por id
   async getCartById(cid) {
-    
-      const carts = await this.getCarts();
+    try{
+    const carts = await this.getCarts();
+    const cart = carts.find((c) => c.id === cid);
 
-      const cart = carts.find(cart => cart.id === cid);
-
-      if (!cart) {
-        console.error('no se encontro el carrito');
-        return null;
-      } else{
-      return cart;
+    return cart
+    } catch{
+      throw new Error ('no se encontro carrito con ese id')
     }
   } 
   // agregar al carrito
-  async addProductToCart(cid, pid) {
+  async addProductToCart(cid, pid, quantity = 1) {
     try {
-      const cart = await this.getCartById(cid);
+      const carts = await this.getCarts();
   
-      if (!cart) {
-        throw new Error("No existe ese id de carrito");
+      const cartIndex = carts.findIndex((c) => c.id === cid);
+  
+      if (cartIndex === -1) {
+        throw new Error("No existe ese carrito");
       }
   
       const product = await productManager.getProductById(pid);
@@ -71,56 +69,58 @@ export class CartManager {
         throw new Error("No existe un producto con ese id");
       }
   
+      const cart = carts[cartIndex];
+  
       const productIndex = cart.products.findIndex((p) => p.id === pid);
   
       if (productIndex === -1) {
         const newProduct = { id: pid, quantity: 1 };
         cart.products.push(newProduct);
       } else {
-        cart.products[productIndex].quantity++;
+        cart.products[productIndex].quantity += quantity;
       }
   
-      await this.saveCarts();
+      await promises.writeFile(this.path, JSON.stringify(carts));
+  
       return cart;
     } catch (error) {
-      console.error("Error al agregar el producto al carrito:", error);
+      console.error("Error al agregar el producto al carrito", error);
       throw error;
     }
   }
   
-  // eliminar de carrito 
-  async removeProductFromCart(cid, pid) {
-    try {
-      const cart = await this.getCartById(cid);
   
-      if (!cart) {
-        throw new Error("No existe ese id de carrito");
-      }
-  
-      const productIndex = cart.products.find((p) => p.id === pid);
-  
-      if (productIndex === -1) {
-        throw new Error("No existe un producto con ese id en el carrito");
-      }
-  
-      // Elimina el producto del carrito
-      cart.products.splice(productIndex, 1);
-  
-      await this.saveCarts();
-      return cart;
-    } catch (error) {
-      console.error("Error al eliminar el producto del carrito:", error);
-      throw error;
-    }
-  }
-  
-  async saveCarts() {
-    try {
-      await promises.writeFile(this.path, JSON.stringify(this.carts));
-    } catch (error) {
-      console.error('Error al guardar carrito', error);
-      throw error;
-    }
-  }
 
+// eliminar un producto del carrito
+async removeProductFromCart(cid, pid) {
+  try {
+
+    const cart = await this.getCartById(cid);
+
+    if (!cart) {
+      throw new Error("No existe ese carrito");
+    }
+
+    const productIndex = cart.products.findIndex((p) => p.id === pid);
+
+    if (productIndex === -1) {
+      throw new Error("No existe un producto con ese id en el carrito");
+      
+    }
+
+    cart.products.splice(productIndex, 1);
+
+    const carts = await this.getCarts();
+    const cartIndex = carts.findIndex((c) => c.id === cid);
+
+    if (cartIndex !== -1) {
+      carts[cartIndex] = cart;
+      await promises.writeFile(this.path, JSON.stringify(carts));
+    }
+
+    return cart;
+  } catch (error) {
+    console.error("Error al eliminar producto del carrito ", error);
+  }
+}
 }

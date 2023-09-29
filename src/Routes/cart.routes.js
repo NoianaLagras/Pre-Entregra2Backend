@@ -2,8 +2,7 @@ import {Router} from "express";
 import { CartManager } from '../CartManager.js';
 import __dirname from '../utils.js';
 
-const cartManager = new CartManager(`${__dirname}../../Carts.JSON`);
-
+const cartManager = new CartManager(`${__dirname}/../Carts.JSON`);
 const cartsRouter = Router();
 
 // ---- Obtener todos los carritos -----
@@ -25,7 +24,6 @@ cartsRouter.post('/', async (req, res) => {
     res.status(500).json({ error: 'No se pudo crear el carrito' });
   }
 });
-
 // ---- Obtener un carrito por id ----
 cartsRouter.get('/:cid', async (req, res) => {
   const  cid  = parseInt(req.params.cid); 
@@ -47,46 +45,28 @@ cartsRouter.get('/:cid', async (req, res) => {
 
 // ---- Agregar producto a un carrito ----
 cartsRouter.post('/:cid/products/:pid', async (req, res) => {
-  const cid = parseInt(req.params.cid);
-  const pid = parseInt(req.params.pid);
+  const { cid , pid} = req.params;
+  const {quantity} = req.body
 
-  if (isNaN(cid) || isNaN(pid)) {
-    res.status(400).json({ error: 'Parámetros no válidos' });
-    return;
-  }
 
   try {
-    await cartManager.addProductToCart(cid, pid);
+    await cartManager.addProductToCart(+cid, +pid , quantity);
     res.status(200).json({ message: 'Producto agregado al carrito' });
   } catch (error) {
     console.error("Error al agregar el producto al carrito:", error);
     res.status(500).json({ error: 'No se pudo agregar el producto al carrito' });
   }
 });
-
-  // ---- Eliminar un producto de un carrito ----
+// --- Borrar un producto del carrito ---
 cartsRouter.delete('/:cid/products/:pid', async (req, res) => {
-  const cid = parseInt(req.params.cid);
-  const pid = parseInt(req.params.pid);
-
-  if (isNaN(cid) || isNaN(pid)) {
-    res.status(400).json({ error: 'parametros no validos' });
-    return;
-  }
+  const { cid, pid } = req.params;
 
   try {
-    const cart = await cartManager.removeProductFromCart(cid, pid);
-
-    if (!cart) {
-      res.status(404).json({ error: 'No se encontró el carrito' });
-    } else {
-      res.status(200).json({ message: 'Producto eliminado del carrito' });
-    }
+    await cartManager.removeProductFromCart(+cid, +pid);
+    res.status(200).json({ message: 'Producto eliminado del carrito' });
   } catch (error) {
-    console.error("Error al eliminar el producto del carrito", error);
+    console.error("Error al eliminar el producto del carrito:", error);
     res.status(500).json({ error: 'No se pudo eliminar el producto del carrito' });
   }
 });
-
-
 export default cartsRouter;

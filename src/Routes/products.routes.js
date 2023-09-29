@@ -2,7 +2,7 @@ import {Router} from "express";
 import { ProductManager } from "../ProductManager.js";
 import __dirname from "../utils.js";
 
-const productManager = new ProductManager(`${__dirname}../../Products.JSON`);
+const productManager = new ProductManager(`${__dirname}/../Products.JSON`);
 const productsRouter = Router();
 //     ------ Obtener Productos -------
 productsRouter.get('/', async (req, res) => {
@@ -37,10 +37,10 @@ productsRouter.get('/:pid', async (req, res) => {
         if (product) {
             res.json({product});
         } else {
-            res.status(404).json({ error: 'Producto no encontrado.' });
+            res.status(404).json({ error: 'Producto no encontrado..' });
         }
     } catch (error) {
-        res.status(500).json({ error: 'Error al obtener el producto.' });
+        res.status(500).json({ error:  ' Error al obtener el producto.' });
     }
 });
 
