@@ -48,7 +48,7 @@ export class ProductManager {
                 stock,
                 code,
                 status,
-                thumbnails,
+                thumbnails: [thumbnails],
             };
 
             products.push(newProduct);

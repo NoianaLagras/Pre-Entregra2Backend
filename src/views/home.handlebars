@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productos</title>
+</head>
+<body>
+  <header> <h1>E-commerce
+  </h1></header> 
+
+ <h2>Productos</h2>
+<div class="container">
+  {{#if products.length}}
+    {{#each products}}
+    <div class="cards">
+      <img src="{{this.thumbnails}}" alt="Imagen del producto" class="productImage">
+      <h3 class="cardTitle"> {{this.title}}</h3>
+      <p class="cardDescription"> - Descripción: {{this.description}}</p>
+      <h4 class="cardPrice"> ${{this.price}}</h4>
+      <h4 class="cardStock"> - Stock:{{this.stock}}</h4>
+      </div>
+    {{/each}}
+  {{else}}
+    <h1>No se encontraron productos</h1>
+  {{/if}}
+</div>
+
+</body>
+</html>

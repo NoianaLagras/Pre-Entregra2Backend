@@ -4,6 +4,7 @@ import __dirname from "../utils.js";
 
 const productManager = new ProductManager(`${__dirname}/../Products.JSON`);
 const productsRouter = Router();
+
 //     ------ Obtener Productos -------
 productsRouter.get('/', async (req, res) => {
     try {
@@ -73,7 +74,7 @@ productsRouter.put('/:pid', async (req, res) => {
     }
 });
 
-// ---  Eliminar por id    ----- 
+// ---  Eliminar por id    -----
 productsRouter.delete('/:pid', async (req, res) => {
     const pid = parseInt(req.params.pid);
 
