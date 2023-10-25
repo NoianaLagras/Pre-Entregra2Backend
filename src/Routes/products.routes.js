@@ -1,23 +1,14 @@
 import {Router} from "express";
-import { ProductManager } from "../ProductManager.js";
+import { productManager } from "../dao/db/manager/products.manager.js";
 import __dirname from "../utils.js";
 
-const productManager = new ProductManager(`${__dirname}/../Products.JSON`);
 const productsRouter = Router();
 
 //     ------ Obtener Productos -------
 productsRouter.get('/', async (req, res) => {
     try {
-        // limite de consulta
-        const limit = req.query.limit; 
-        const products = await productManager.getProducts();
-
-        if (limit) {
-            const limitedProducts = products.slice(0, limit); 
-            res.json({limitedProducts});
-        } else {
-            res.json({products});
-        }
+      const products = await productManager.findAll();
+      res.status(200).json({message: "Productos", products })
     } catch (error) {
         res.status(500).json({ error: 'Error al obtener los productos.' });
     }
@@ -25,32 +16,26 @@ productsRouter.get('/', async (req, res) => {
 
 // Ruta para obtener un producto por ID
 productsRouter.get('/:pid', async (req, res) => {
-    const pid = parseInt(req.params.pid);
-
-    if (isNaN(pid)) {
-        res.status(400).json({ error: 'El id del producto debe ser un numero valido' });
-        return;
-    }
-
+    const pid = req.params.pid;
     try {
-        const product = await productManager.getProductById(pid);
+        const product = await productManager.findById(pid);
 
         if (product) {
-            res.json({product});
+            res.status(200).json({ message: 'Producto encontrado', product });
         } else {
-            res.status(404).json({ error: 'Producto no encontrado..' });
+            res.status(404).json({ error: 'Producto no encontrado.' });
         }
     } catch (error) {
-        res.status(500).json({ error:  ' Error al obtener el producto.' });
+        res.status(500).json({ error: 'Error al obtener el producto.' });
     }
 });
+
 
 //  --- Agregar Producto ---- 
 productsRouter.post('/', async (req, res) => {
     try {
-        const { title, description, price, category, code, stock, status, thumbnails } = req.body;
-        await productManager.addProduct(title, description, price, category, code, stock, status, thumbnails);
-        res.status(200).json({ message: 'Producto agregado correctamente' });
+        const createProduct = await productManager.createOne(req.body)
+         res.status(200).json({ message: 'Producto agregado correctamente', product : createProduct});
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -58,33 +43,27 @@ productsRouter.post('/', async (req, res) => {
 
 //      ----  Actualizar un producto por id   ----
 productsRouter.put('/:pid', async (req, res) => {
-    const pid = parseInt(req.params.pid);
-
-    if (isNaN(pid)) {
-        res.status(400).json({ error: 'El id debe ser un numero valido' });
-        return;
-    }
+    const pid = req.params.pid;
 
     try {
         const updatedData = req.body;
-        await productManager.updateProduct(pid, updatedData);
-        res.json({ message: 'Producto actualizado correctamente' });
+        const result = await productManager.updatedOne(pid, updatedData);
+
+        if (result.matchedCount > 0) {
+            res.status(200).json({ message: 'Producto actualizado correctamente' });
+        } else {
+            res.status(404).json({ error: 'Producto no encontrado para actualizar' });
+        }
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 });
-
 // ---  Eliminar por id    -----
 productsRouter.delete('/:pid', async (req, res) => {
-    const pid = parseInt(req.params.pid);
-
-    if (isNaN(pid)) {
-        res.status(400).json({ error: 'El id debe ser un numero valido.' });
-        return;
-    }
+    const pid = req.params.pid
 
     try {
-        await productManager.deleteProduct(pid);
+        await productManager.deleteOne(pid);
         res.json({ message: 'Producto eliminado correctamente' });
     } catch (error) {
         res.status(400).json({ error: error.message });

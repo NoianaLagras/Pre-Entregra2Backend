@@ -16,7 +16,7 @@
       <p class="cardDescription"> - Descripción: {{this.description}}</p>
       <h4 class="cardPrice">  ${{this.price}}</h4>
       <h4 class="cardStock"> - Stock:{{this.stock}}</h4>
-      <button onclick="deleteProduct({{this.id}})"> Eliminar ✖️</button>
+      <button onclick="deleteProduct('{{this._id}}')"> Eliminar ✖️</button>
     </div>
     {{/each}}
   {{else}}

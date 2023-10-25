@@ -122,4 +122,61 @@ footer {
   #formularioAgregarProducto button[type="submit"]:hover {
     background-color: #050000;
   }
+  .contacto{
+    background-image: url('https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8dmlkZW9qdWVnb3N8ZW58MHx8MHx8fDA%3D');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    padding: 100px;
+  }
+  .chats{
+    background-color: #000000c9;
+    border-radius: 20px;
+    max-height: 500px;
+    padding: 40px;
+    margin-bottom: 20px;
+    overflow-y: auto;
+  }
+  .contactanos{
+    background-color: rgba(255, 255, 255, 0.637);
+    color: black;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
   
+  }
+  .message{
+    color: rgb(252, 252, 252);
+    border: 1px solid  rgb(19, 221, 232);
+    padding: 5px;
+   margin: 10px 0;
+    border-radius: 15px;
+  }
+
+  .ChatMessage{
+    color: #ccc;
+    font-size: 35px;
+    text-decoration: underline crimson;
+    font-family: monospace
+  }
+  .user{
+    font-size: 15px;
+    font-weight: 500;
+    color: #adabab;
+  }
+  .text{
+    font-size: 28px;
+  }
+  .correo ,.mensaje{
+    margin: 20px;
+    font-size: 20px;
+    font-weight: 400;
+    color: #050000;
+  }
+  .inputCorreo{
+    width: 60%;
+  }
+  .inputMensaje{
+    width: 60%;
+    height: 150px;
+  }

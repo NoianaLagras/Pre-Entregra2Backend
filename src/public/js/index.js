@@ -73,3 +73,6 @@ function deleteProduct(id) {
     });
   }
 });
+
+
+
