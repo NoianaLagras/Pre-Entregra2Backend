@@ -41,6 +41,7 @@ async removeProductFromCart(idCart, idProduct) {
     }
 
     const productIndex = cart.products.findIndex(p => p.product.toString() === idProduct);
+   //const productIndex = cart.products.findIndex(p => p.product.equals(idProduct));
 
     if (productIndex === -1) {
         return null; 
