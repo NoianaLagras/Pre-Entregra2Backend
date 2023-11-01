@@ -77,11 +77,12 @@ viewsRouter.get('/api/product/:pid', async (req, res) => {
     res.status(500).json({ error: 'Error al cargar los detalles del producto.' });
   }
 });
+
 viewsRouter.get('/api/cart/:cid', async (req, res) => {
   try {
     const idCart = req.params.cid;
-    const cartData = await cartsManager.findCartById(idCart); 
-    res.render('cart', { cartData });
+    const {cart , total} = await cartsManager.findCartById(idCart); 
+    res.render('cart', { cart ,total });
    } catch (error) {
 
     res.status(500).send('Error al renderizar la página de carrito');
