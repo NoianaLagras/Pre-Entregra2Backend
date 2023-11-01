@@ -44,18 +44,17 @@ cartsRouter.post('/:idCart/products/:idProduct',async (req, res) =>{
 })
 cartsRouter.delete("/:idCart", async (req, res) => {
   const { idCart } = req.params;
-  
-  try {
-      const deletedCart = await cartsManager.deleteCart(idCart);
-      if (!deletedCart) {
-          return res.status(404).json({ message: "Carrito no encontrado" });
-      }
-      return res.json({ message: "Carrito Eliminado" });
-  } catch (error) {
-      return res.status(500).json({ message: "Error al eliminar Carrito." });
-  }
-})
 
+  try {
+    const deletedCart = await cartsManager.deleteAllProducts(idCart);
+    if (!deletedCart) {
+      return res.status(404).json({ message: "Carrito no encontrado" });
+    }
+    return res.json({ message: "Todos los productos han sido eliminados del carrito" });
+  } catch (error) {
+    return res.status(500).json({ message: "Error al eliminar todos los productos del carrito" });
+  }
+});
 cartsRouter.delete("/:idCart/products/:idProduct", async (req, res) => {
   const { idCart, idProduct } = req.params;
 
@@ -68,4 +67,31 @@ cartsRouter.delete("/:idCart/products/:idProduct", async (req, res) => {
   } catch (error) {
       return res.status(500).json({ message: "Error al eliminar producto del carrito" });
   }
-});
+})
+cartsRouter.put("/:idCart", async (req, res) => {
+  const { idCart } = req.params;
+  const updatedProducts = req.body;
+  try {
+    const updatedCart = await cartsManager.updateCart(idCart, updatedProducts);
+    if (!updatedCart) {
+      return res.status(404).json({ message: "Carrito no encontrado" });
+    }
+    return res.json(updatedCart);
+  } catch (error) {
+    return res.status(500).json({ message: "Error al actualizar el carrito" });
+  }
+}); 
+cartsRouter.put("/:idCart/products/:idProduct", async (req, res) => {
+  const { idCart, idProduct } = req.params;
+  const { quantity } = req.body;
+
+  try {
+    const updatedCart = await cartsManager.updateProductQuantity(idCart, idProduct, quantity);
+    if (!updatedCart) {
+      return res.status(404).json({ message: "Carrito o producto no encontrado" });
+    }
+    return res.json(updatedCart);
+  } catch (error) {
+    return res.status(500).json({ message: "Error al actualizar la cantidad del producto en el carrito" });
+  }
+});;

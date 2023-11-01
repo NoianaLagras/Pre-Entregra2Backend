@@ -7,13 +7,23 @@ const productsRouter = Router();
 //     ------ Obtener Productos -------
 productsRouter.get('/', async (req, res) => {
     try {
-      const products = await productManager.findAll();
-      res.status(200).json({message: "Productos", products })
+        const products = await (req.query);
+        res.status(200).json({
+            status: 'success',
+            payload: products.result,
+            totalPages: products.info.pages,
+            prevPage: products.info.prev,
+            nextPage: products.info.next,
+            page: products.info.page,
+            hasPrevPage: products.info.hasPrevPage,
+            hasNextPage: products.info.hasNextPage,
+            prevLink: products.info.prevLink,
+            nextLink: products.info.nextLink,
+        });
     } catch (error) {
         res.status(500).json({ error: 'Error al obtener los productos.' });
     }
 });
-
 // Ruta para obtener un producto por ID
 productsRouter.get('/:pid', async (req, res) => {
     const pid = req.params.pid;

@@ -6,23 +6,27 @@
   <title>Websocket Products || E-commerce</title>
 </head>
 <body>
-<h2>Productos en Tiempo Real</h2>
+<h2>Live Updated Products</h2>
+
 <div class="container">
-  {{#if products.length}}
-    {{#each products}}
-    <div class="cards">
-      <img src="{{this.thumbnails}}" alt="Imagen del producto" class="productImage">
-      <h3 class="cardTitle">{{this.title}}</h3>
-      <p class="cardDescription"> - Descripción: {{this.description}}</p>
-      <h4 class="cardPrice">  ${{this.price}}</h4>
-      <h4 class="cardStock"> - Stock:{{this.stock}}</h4>
-      <button onclick="deleteProduct('{{this._id}}')"> Eliminar ✖️</button>
-    </div>
-    {{/each}}
-  {{else}}
-    <h1>No se encontraron productos</h1>
-  {{/if}}
-</div>
+    {{#if productList.length}}
+      {{#each productList}}
+        <div class="cards">
+          <img src="{{this.thumbnails}}" alt="Imagen del producto" class="productImage">
+          <h3 class="cardTitle">{{this.title}}</h3>
+          <h4 class="cardPrice">$ {{this.price}}</h4>
+          <h4 class="cardStock">Stock: {{this.stock}}</h4>
+          <button onclick="deleteProduct('{{this._id}}')"> Eliminar ✖️</button>
+        </div>
+      {{/each}}
+    {{else}}
+      <h1>No se encontraron productos</h1>
+    {{/if}}
+  </div>
+
+
+
+
 
 
   <!-- formulario para agregar productos -->

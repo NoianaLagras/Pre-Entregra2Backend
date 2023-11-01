@@ -53,25 +53,26 @@ function deleteProduct(id) {
     actualizarInterfaz(productos);
   });
 
-   function actualizarInterfaz(productos) {
+  function actualizarInterfaz(productList) {
     const container = document.querySelector('.container');
     container.innerHTML = '';
-
-    productos.forEach((product) => {
+  
+    productList.forEach((product) => {
       const card = document.createElement('div');
       card.classList.add('cards');
-
+  
       card.innerHTML = `
-      <img src="${product.thumbnails}" alt="Imagen del producto" class="productImage">
-        <h3 class="cardTitle"> ${product.title}</h3>
-        <p class="cardDescription"> - Descripción: ${product.description}</p>
-        <h4 class="cardPrice">  $${product.price}</h4>
-        <button data-product-id="${product.id}" onclick="deleteProduct(${product.id})">Eliminar✖️</button>
+        <img src="${product.thumbnails}" alt="Imagen del producto" class="productImage">
+        <h3 class="cardTitle">${product.title}</h3>
+        <h4 class="cardPrice">$${product.price}</h4>
+        <h4 class="cardStock">Stock: ${product.stock}</h4>
+        <button data-product-id="${product._id}" onclick="deleteProduct('${product._id}')">Eliminar✖️</button>
       `;
-
+  
       container.appendChild(card);
     });
   }
+  
 });
 
 

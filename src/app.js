@@ -1,6 +1,8 @@
 import express  from "express";
 import __dirname from './utils.js';
-import { engine } from "express-handlebars";
+import exphbs from 'express-handlebars';
+import { allowInsecurePrototypeAccess } from '@handlebars/allow-prototype-access';
+import Handlebars from 'handlebars';
 import { Server } from "socket.io";
 import productsRouter from "./Routes/products.routes.js";
 import cartsRouter from "./Routes/cart.routes.js";
@@ -21,16 +23,22 @@ app.use(express.json());
 app.use(express.static(__dirname+'/public'))
 
 //handlebars
-app.engine('handlebars', engine());
-app.set('views',__dirname+'/views');
+const hbs = exphbs.create({
+  extname: 'handlebars',
+  defaultLayout: 'main',
+  handlebars: allowInsecurePrototypeAccess(Handlebars)
+});
+
+app.engine('handlebars', hbs.engine);
+app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
 
 //routes de products , carts , mensaje
-app.use('/api/products', productsRouter);
+
 app.use('/api/carts', cartsRouter);
 app.use('/', viewsRouter);
 app.use('/chat', messageRouter);
-
+app.use('/products', productsRouter);
 // Iniciar el servidor
 const httpServer = app.listen(PORT, () => {
     console.log(`Escuchando en el puerto ${PORT}`);
@@ -48,32 +56,30 @@ socketServer.on('connection', async (socket) => {
       console.log(`Cliente Desconectado: ${socket.id}`);
   });
 // agregar product en mongo
-  socket.on('addProduct', async (product) => {
-      try {
-
-          const createdProduct = await productManager.createOne(product);
-
-         const productosActualizados = await productManager.findAll();
-          socketServer.emit('actualizarProductos', productosActualizados);
-      } catch (error) {
-          console.error('Error al agregar el producto:', error.message);
-      }
-  });
+socket.on('addProduct', async (product) => {
+  try {
+    const createdProduct = await productManager.createOne(product);
+    const productosActualizados = await productManager.findAll(); 
+    socketServer.emit('actualizarProductos', productosActualizados);
+  } catch (error) {
+    console.error('Error al agregar el producto:', error.message);
+  }
+});
 
   socket.on('deleteProduct', async (id) => {
-      try {
-          // Delete product en Mongo
-          const result = await productManager.deleteOne({ _id: id });
+    try {
 
-          if (result.deletedCount > 0) {
-              const productosActualizados = await productManager.findAll();
-              socketServer.emit('actualizarProductos', productosActualizados);
-          } else {
-              console.error('El producto no se encontró para eliminar.');
-          }
-      } catch (error) {
-          console.error('Error al eliminar el producto:', error.message);
+      const result = await productManager.deleteOne({ _id: id });
+  
+      if (result.deletedCount > 0) {
+        const productosActualizados = await productManager.findAll();
+        socketServer.emit('actualizarProductos', productosActualizados);
+      } else {
+        console.error('El producto no se encontró para eliminar.');
       }
+    } catch (error) {
+      console.error('Error al eliminar el producto:', error.message);
+    }
   });
 // mensajes
 

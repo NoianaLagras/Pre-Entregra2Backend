@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    max-width: 100%;
 }
 
 
@@ -77,8 +78,8 @@ h2{
     margin-right: 10px;
   }
 footer {
-    margin-top: 50px;
-    margin-bottom: 0;
+    margin-top: 100px;
+    margin-bottom: 0px;
     background-color: black;
     color: white;
     text-align: center;
@@ -179,4 +180,192 @@ footer {
   .inputMensaje{
     width: 60%;
     height: 150px;
+  }
+
+  /* item details*/
+
+  .itemDetail {
+    margin: 50px auto;
+      padding: 40px;
+      display: grid;
+      text-align: center;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas: 
+      "img precio"
+      "img botones"
+      "descripcion descripcion";
+      
+  
+  }
+  .imgDetail{
+    grid-area: img;
+          border: 2px solid rgb(176, 172, 172);
+          margin: 30px;
+          width: 500px;
+          height: auto;
+          padding: 30px;
+          border-radius:15px ;
+  
+  }
+  .imgDetail:hover {
+    transform: scale(1.1);
+    transition: 1s;
+  }
+  .detailImg{
+    width: 400px;
+    max-height:800px ;
+  }
+  .detalle{
+    grid-area: precio;
+  
+  }
+  .stock {
+    text-align: center;
+      display: flex;
+      justify-content: center;
+  
+  }
+
+  .cantidadDetail{
+    font-size: 17px;
+    margin: 10px;
+      
+    }
+    .stockNum{
+      color: rgb(116, 114, 114);
+    }
+  .descripcion{
+    grid-area: descripcion;
+    margin-top: 70px;
+    border: 2px solid rgb(176, 172, 172);
+    border-radius: 25px ;
+      padding: 50px;
+  }
+  .botonDetail{
+    width: 80%;
+    text-decoration: none;
+    padding: 20px;
+    background-color: #39b78f; 
+    color: white;
+    font-weight: 700;
+    font-family: Arial, Helvetica, sans-serif ;
+    font-size: 20px;
+    border-radius: 15px ;
+    border: #39b78f;
+    margin:30px;
+  }
+  .precioDetail{
+    color: rgb(67, 67, 67);
+    margin-bottom: 25px;
+    font-size: 25px;
+  }
+  .botonDetail:hover{
+  background-color: #74dbcb;
+  }
+  .nombreProducto{
+    font-size: 50px;
+    margin-top: 15px;
+    padding: 50px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .pagination {
+    text-align: center;
+    margin-top: 20px;
+    margin-left: 350px;
+  }
+  .tituloItem{
+    text-align: center;
+    margin: 20px;
+  }
+  /* enlaces de paginacion */
+  .paginationArrow {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #48474767; 
+    color: #000000; 
+    text-decoration: none;
+    border-radius: 3px;
+    margin: 40px;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .paginationArrow:hover{
+    background-color: #e2e1e155; 
+    color: #ff0055; 
+  }
+  .filtros{
+    margin: 20px;
+  }
+  .filterButton{
+    background-color: #000000;
+    color: #ffff;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 7px 15px;
+  }
+
+  .filterButton:hover{
+  background-color: #00000095;
+  }
+  .cartList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin: 50px;
+  }
+
+  .cartProduct {
+    width: 95%;
+    display: flex;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    border-radius: 8px; 
+    overflow: hidden;
+    ;
+  }
+  .cartProduct img{
+  width: 150px;
+  }
+  .CartProductImage {
+    width: 30%; 
+    object-fit: cover;
+  }
+
+  .CartProductTitle {
+    width: 40%; 
+    padding: 10px;
+    text-align: center;
+  }
+
+  .CartProductTitle h2 {
+    margin: 0;
+  }
+
+  .CartProductDescription {
+    margin: 0;
+  }
+
+  .CartQuantity {
+    width: 30%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+
+  }
+
+  .CartProductPrice {
+    margin: 10px;
+  }
+
+  .CartProductQuantity {
+    margin: 10px;
+  }
+  .checkout{
+    display: flex;
+    justify-content: space-between;
+    margin: 50px;
+  }
+  #total{
+    font-size: 30px;
+    font-weight: 600;
   }
